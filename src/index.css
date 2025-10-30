@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Minimal base overrides */
+html,
+body,
+#root {
+  height: 100%;
+}

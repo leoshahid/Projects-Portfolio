@@ -79,6 +79,32 @@ end; $$ language plpgsql security definer;
 
 drop trigger if exists project_steps_set_user on project_steps;
 create trigger project_steps_set_user before insert on project_steps for each row execute function set_project_step_user();
+
+-- Notes per step (optional text + image)
+create table if not exists project_step_notes (
+  id uuid primary key default gen_random_uuid(),
+  step_id uuid not null references project_steps(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  note_text text,
+  image_url text,
+  created_at timestamptz not null default now()
+);
+
+alter table project_step_notes enable row level security;
+create policy "Read own notes" on project_step_notes for select using (auth.uid() = user_id);
+create policy "Insert own notes" on project_step_notes for insert with check (auth.uid() = user_id);
+create policy "Update own notes" on project_step_notes for update using (auth.uid() = user_id);
+create policy "Delete own notes" on project_step_notes for delete using (auth.uid() = user_id);
+
+create or replace function set_step_note_user()
+returns trigger as $$
+begin
+  if NEW.user_id is null then NEW.user_id := auth.uid(); end if;
+  return NEW;
+end; $$ language plpgsql security definer;
+
+drop trigger if exists project_step_notes_set_user on project_step_notes;
+create trigger project_step_notes_set_user before insert on project_step_notes for each row execute function set_step_note_user();
 ```
 
 #### 3) Install and run
@@ -130,3 +156,5 @@ create policy "User can delete own files" on storage.objects for delete using (
 ```
 
 3. The app uploads selected image files to this bucket and stores the public URL in `projects.image_url`.
+
+Notes images: you can reuse the same `project-images` bucket; files are placed under `<auth.uid()>/notes/<uuid>.<ext>`. The same storage policies above cover these paths.

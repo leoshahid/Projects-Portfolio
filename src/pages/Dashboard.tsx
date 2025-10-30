@@ -134,7 +134,7 @@ export default function Dashboard() {
       </div>
       {/* Full-width trend */}
       <Card title="Progress trend (last 10)">
-        <div className="h-56">
+        <div className="h-72">
           <Line
             data={trendData}
             options={{
@@ -175,7 +175,15 @@ export default function Dashboard() {
               to={`/projects/${p.id}`}
               className="block border border-transparent rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow"
             >
-              <div className="h-24 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-lg" />
+              {p.image_url ? (
+                <img
+                  src={p.image_url}
+                  alt=""
+                  className="h-24 w-full object-cover rounded-t-xl"
+                />
+              ) : (
+                <div className="h-24 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-xl" />
+              )}
               <div className="p-3">
                 <div className="font-medium truncate" title={p.name}>
                   {p.name}

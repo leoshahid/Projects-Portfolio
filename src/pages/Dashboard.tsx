@@ -134,14 +134,17 @@ export default function Dashboard() {
       </div>
       {/* Full-width trend */}
       <Card title="Progress trend (last 10)">
-        <Line
-          data={trendData}
-          options={{
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { min: 0, max: 100 } },
-          }}
-        />
+        <div className="h-56">
+          <Line
+            data={trendData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: { y: { min: 0, max: 100 } },
+            }}
+          />
+        </div>
       </Card>
 
       {/* Two small charts in a row */}
@@ -170,7 +173,7 @@ export default function Dashboard() {
             <Link
               key={p.id}
               to={`/projects/${p.id}`}
-              className="block border rounded-lg bg-white shadow-sm hover:shadow-md transition-shadow"
+              className="block border border-transparent rounded-xl bg-white shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="h-24 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-lg" />
               <div className="p-3">
@@ -197,7 +200,7 @@ export default function Dashboard() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
+    <div className="border border-transparent rounded-xl p-4 bg-white shadow-md">
       <div className="text-sm text-gray-600">{label}</div>
       <div className="text-2xl font-semibold">{value}</div>
     </div>
@@ -212,7 +215,7 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border rounded-lg p-4 bg-white shadow-sm">
+    <div className="border border-transparent rounded-xl p-4 bg-white shadow-md">
       <h2 className="font-medium mb-3">{title}</h2>
       {children}
     </div>

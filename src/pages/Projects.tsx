@@ -82,7 +82,7 @@ export default function Projects() {
         {projects.map((p) => (
           <div
             key={p.id}
-            className="border rounded-lg bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow hover:-translate-y-0.5 transform"
+            className="border border-transparent rounded-xl bg-white overflow-hidden shadow-md hover:shadow-lg transition-transform transition-shadow hover:-translate-y-0.5"
           >
             {p.image_url ? (
               <img

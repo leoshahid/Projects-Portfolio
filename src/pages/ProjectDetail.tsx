@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
+import Spinner from "../components/Spinner";
 
 type Project = {
   id: string;
@@ -82,11 +83,14 @@ export default function ProjectDetail() {
     const total = nextSteps.length;
     const completed = nextSteps.filter((s) => s.is_done).length;
     const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+    const newStatus = pct === 100 ? "completed" : "active";
     await supabase
       .from("projects")
-      .update({ progress: pct })
+      .update({ progress: pct, status: newStatus })
       .eq("id", id as string);
-    setProject((prev) => (prev ? { ...prev, progress: pct } : prev));
+    setProject((prev) =>
+      prev ? { ...prev, progress: pct, status: newStatus } : prev
+    );
   }
 
   async function addNote(stepId: string) {
@@ -127,7 +131,7 @@ export default function ProjectDetail() {
     setNoteDraft((prev) => ({ ...prev, [stepId]: { text: "", file: null } }));
   }
 
-  if (loading) return <div>Loading…</div>;
+  if (loading) return <Spinner />;
   if (!project) return <div>Not found</div>;
 
   return (

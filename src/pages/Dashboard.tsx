@@ -118,18 +118,24 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Stat label="Total Projects" value={projects.length.toString()} />
+        <Stat
+          label="Total Projects"
+          value={projects.length.toString()}
+          variant="indigo"
+        />
         <Stat
           label="Active"
           value={projects
             .filter((p) => p.status === "active")
             .length.toString()}
+          variant="emerald"
         />
         <Stat
           label="Completed"
           value={projects
             .filter((p) => p.status === "completed")
             .length.toString()}
+          variant="violet"
         />
       </div>
       {/* Full-width trend */}
@@ -150,18 +156,24 @@ export default function Dashboard() {
       {/* Two small charts in a row */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card title="Status breakdown">
-          <div className="max-w-xs mx-auto">
-            <Doughnut data={statusData} />
+          <div className="max-w-xs mx-auto h-48">
+            <Doughnut
+              data={statusData}
+              options={{ responsive: true, maintainAspectRatio: false }}
+            />
           </div>
         </Card>
         <Card title="Progress distribution">
-          <Bar
-            data={distributionData}
-            options={{
-              responsive: true,
-              plugins: { legend: { display: false } },
-            }}
-          />
+          <div className="h-48">
+            <Bar
+              data={distributionData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+              }}
+            />
+          </div>
         </Card>
       </div>
 
@@ -206,9 +218,25 @@ export default function Dashboard() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({
+  label,
+  value,
+  variant,
+}: {
+  label: string;
+  value: string;
+  variant?: "indigo" | "emerald" | "violet";
+}) {
+  const bg =
+    variant === "emerald"
+      ? "from-emerald-100"
+      : variant === "violet"
+      ? "from-violet-100"
+      : "from-indigo-100";
   return (
-    <div className="border border-transparent rounded-xl p-4 bg-white shadow-md">
+    <div
+      className={`border border-transparent rounded-xl p-4 shadow-md bg-gradient-to-br ${bg} to-white`}
+    >
       <div className="text-sm text-gray-600">{label}</div>
       <div className="text-2xl font-semibold">{value}</div>
     </div>
@@ -223,7 +251,7 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-transparent rounded-xl p-4 bg-white shadow-md">
+    <div className="border border-transparent rounded-xl p-4 shadow-md bg-white">
       <h2 className="font-medium mb-3">{title}</h2>
       {children}
     </div>

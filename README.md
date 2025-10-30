@@ -105,6 +105,20 @@ end; $$ language plpgsql security definer;
 
 drop trigger if exists project_step_notes_set_user on project_step_notes;
 create trigger project_step_notes_set_user before insert on project_step_notes for each row execute function set_step_note_user();
+
+-- User profiles (name, username)
+create table if not exists profiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  name text,
+  username text unique,
+  avatar_url text,
+  created_at timestamptz not null default now()
+);
+
+alter table profiles enable row level security;
+create policy "Read own profile" on profiles for select using (auth.uid() = user_id);
+create policy "Insert own profile" on profiles for insert with check (auth.uid() = user_id);
+create policy "Update own profile" on profiles for update using (auth.uid() = user_id);
 ```
 
 #### 3) Install and run
@@ -158,3 +172,5 @@ create policy "User can delete own files" on storage.objects for delete using (
 3. The app uploads selected image files to this bucket and stores the public URL in `projects.image_url`.
 
 Notes images: you can reuse the same `project-images` bucket; files are placed under `<auth.uid()>/notes/<uuid>.<ext>`. The same storage policies above cover these paths.
+
+Avatars: reuse the `project-images` bucket as well; store at `<auth.uid()>/avatar/<uuid>.<ext>` and keep the public URL in `profiles.avatar_url`.

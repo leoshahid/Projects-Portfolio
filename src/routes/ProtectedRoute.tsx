@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
+import Spinner from "../components/Spinner";
 
 export default function ProtectedRoute({
   children,
@@ -30,7 +31,7 @@ export default function ProtectedRoute({
   if (loading)
     return (
       <div className="h-screen grid place-items-center text-gray-600">
-        Loading…
+        <Spinner size={40} />
       </div>
     );
   if (!isAuthed)

@@ -74,7 +74,12 @@ export default function Projects() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading && (
-          <div className="border rounded-lg bg-white p-4">Loading…</div>
+          <div className="border rounded-lg bg-white p-8 grid place-items-center">
+            <span
+              className="inline-block animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"
+              style={{ width: "28px", height: "28px" }}
+            />
+          </div>
         )}
         {!loading && projects.length === 0 && (
           <div className="border rounded-lg bg-white p-4">No projects yet.</div>
@@ -302,7 +307,7 @@ function ProjectModal({
       const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
       await supabase
         .from("projects")
-        .update({ progress: pct })
+        .update({ progress: pct, status: pct === 100 ? "completed" : "active" })
         .eq("id", project.id);
     } else {
       const { data: inserted, error } = await supabase
@@ -505,7 +510,7 @@ function StepsModal({
     const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
     await supabase
       .from("projects")
-      .update({ progress: pct })
+      .update({ progress: pct, status: pct === 100 ? "completed" : "active" })
       .eq("id", projectId);
     onChanged();
   }

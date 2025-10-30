@@ -4,6 +4,8 @@ import { supabase } from "../lib/supabaseClient";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -16,13 +18,36 @@ export default function SignUp() {
     const { data, error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
     if (error) return setMessage(error.message);
-    if (data.user) navigate("/", { replace: true });
+    if (data.user) {
+      await supabase
+        .from("profiles")
+        .upsert({ user_id: data.user.id, name, username });
+      navigate("/", { replace: true });
+    }
   }
 
   return (
     <div className="max-w-md mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Create account</h1>
       <form onSubmit={onSubmit} className="space-y-3">
+        <div>
+          <label className="block text-sm mb-1">Name</label>
+          <input
+            className="w-full border rounded-md px-3 py-2"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">Username</label>
+          <input
+            className="w-full border rounded-md px-3 py-2"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
         <div>
           <label className="block text-sm mb-1">Email</label>
           <input

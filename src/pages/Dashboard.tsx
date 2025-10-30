@@ -192,7 +192,7 @@ export default function Dashboard() {
                 <img
                   src={p.image_url}
                   alt=""
-                  className="h-24 w-full object-cover rounded-t-xl"
+                  className="block h-24 w-full object-cover rounded-t-xl"
                 />
               ) : (
                 <div className="h-24 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-t-xl" />

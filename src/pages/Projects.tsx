@@ -93,7 +93,7 @@ export default function Projects() {
               <img
                 src={p.image_url}
                 alt=""
-                className="h-36 w-full object-cover"
+                className="block h-36 w-full object-cover"
               />
             ) : (
               <div className="h-36 bg-gray-100" />

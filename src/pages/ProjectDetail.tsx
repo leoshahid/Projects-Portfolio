@@ -144,7 +144,7 @@ export default function ProjectDetail() {
           <img
             src={project.image_url}
             alt=""
-            className="w-full h-72 md:h-80 object-cover"
+            className="block w-full h-72 md:h-80 object-cover"
           />
         ) : (
           <div className="w-full h-72 md:h-80 bg-gradient-to-r from-indigo-50 to-violet-50" />
@@ -179,9 +179,9 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      <div className="border border-transparent rounded-xl p-4 bg-white shadow-md">
+      <div className="border border-transparent rounded-xl p-4 bg-white shadow-md overflow-hidden">
         <div className="font-medium mb-3">Steps</div>
-        <div className="grid gap-3">
+        <div className="grid gap-3 break-words">
           {steps.map((s, idx) => (
             <div
               key={s.id}
@@ -216,7 +216,7 @@ export default function ProjectDetail() {
                         <img
                           src={n.image_url}
                           alt="note"
-                          className="mt-2 h-28 w-full object-cover rounded"
+                          className="mt-2 h-28 w-full object-cover rounded block"
                         />
                       )}
                       <div className="text-[11px] text-gray-500 mt-1">
@@ -230,7 +230,7 @@ export default function ProjectDetail() {
                 </div>
                 <div className="flex items-center gap-2">
                   <input
-                    className="flex-1 border rounded-md px-3 py-2"
+                    className="flex-1 border rounded-md px-3 py-2 min-w-0"
                     placeholder="Add a note..."
                     value={noteDraft[s.id]?.text ?? ""}
                     onChange={(e) =>
@@ -246,6 +246,7 @@ export default function ProjectDetail() {
                   <input
                     type="file"
                     accept="image/*"
+                    className="max-w-full"
                     onChange={(e) =>
                       setNoteDraft((prev) => ({
                         ...prev,

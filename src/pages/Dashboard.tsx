@@ -31,6 +31,7 @@ type Project = {
   status: string;
   progress: number;
   created_at: string;
+  image_url?: string | null;
 };
 
 export default function Dashboard() {
